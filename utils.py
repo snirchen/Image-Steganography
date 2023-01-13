@@ -1,5 +1,5 @@
+import imageio
 import numpy as np
-from PIL import Image
 
 
 def png_file_to_rgb_np_array_converter(png_file_path: str) -> np.array:
@@ -29,9 +29,7 @@ def png_file_to_rgb_np_array_converter(png_file_path: str) -> np.array:
     :param png_file_path: The full path to the file we want to convert.
     :return: The given image as a np array of RGB values
     """
-    image = Image.open(png_file_path).convert('RGB')
-    rgb_np_array = np.array(image)
-    return rgb_np_array
+    return imageio.imread(png_file_path, as_gray=False, pilmode="RGB")
 
 
 def np_array_to_png_file_converter(np_array: np.array, path_to_save_png_file: str) -> None:
@@ -62,5 +60,4 @@ def np_array_to_png_file_converter(np_array: np.array, path_to_save_png_file: st
     :param path_to_save_png_file: Path for saving the image.
     :return: None
     """
-    image = Image.fromarray(np_array, 'RGB')
-    image.save(path_to_save_png_file)
+    imageio.imwrite(path_to_save_png_file, np_array)
