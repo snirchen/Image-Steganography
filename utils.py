@@ -1,8 +1,8 @@
-import imageio
+import imageio.v2 as imageio
 import numpy as np
 
 
-def png_file_to_rgb_np_array_converter(png_file_path: str) -> np.array:
+def png_file_to_rgb_np_array_converter(png_file_path: str) -> np.ndarray:
     """
     This function gets a full path to an image, saved as a png file,
     and returns its representation as a np array of RGB values.
@@ -29,10 +29,10 @@ def png_file_to_rgb_np_array_converter(png_file_path: str) -> np.array:
     :param png_file_path: The full path to the file we want to convert.
     :return: The given image as a np array of RGB values
     """
-    return imageio.imread(png_file_path, as_gray=False, pilmode="RGB")
+    return imageio.imread(png_file_path, pilmode="RGB")
 
 
-def np_array_to_png_file_converter(np_array: np.array, path_to_save_png_file: str) -> None:
+def np_array_to_png_file_converter(np_array: np.ndarray, path_to_save_png_file: str) -> None:
     """
     This function gets a np array, converts it to an RGB image, and saves it as a png file.
 
@@ -61,3 +61,21 @@ def np_array_to_png_file_converter(np_array: np.array, path_to_save_png_file: st
     :return: None
     """
     imageio.imwrite(path_to_save_png_file, np_array)
+
+
+def get_bit(value: int, bit_index: int) -> int:
+    return (value >> bit_index) & 1
+
+
+def set_bit(value: int, bit_to_set: int, bit_index: int) -> int:
+    if bit_to_set:
+        return set_bit_1(value, bit_index)
+    return set_bit_0(value, bit_index)
+
+
+def set_bit_1(value: int, bit_index: int) -> int:
+    return value | (1 << bit_index)
+
+
+def set_bit_0(value: int, bit_index: int) -> int:
+    return value & ~(1 << bit_index)
