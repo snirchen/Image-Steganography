@@ -9,7 +9,7 @@ EXAMPLE_IMAGE = [[(27, 64, 164), (248, 244, 194), (174, 246, 250), (149, 95, 232
                  [(255, 29, 213), (53, 153, 220), (246, 225, 229), (142, 82, 175)]]
 
 # EXAMPLE_TEXT = 'Hey! How are you? (I am fine, Thanks)'
-EXAMPLE_TEXT = 'IIIIIIIIIIIIIIIIIIIII   IIIIIIIIIIIIIIIIIIIII   IIIIIIIIIIIIIIIIIIIII'
+EXAMPLE_TEXT = "Imagine there is no heaven, It is easy if you try. No hell below us Above us, only sky."
 
 PATH = "test.png"
 
@@ -27,7 +27,7 @@ def hide(image_path: str, text_to_hide: str) -> str:
             rgb_value = image_as_np_array[line_num][column_num]
             for color_index, color_value in enumerate(rgb_value):
                 if bits_to_hide == '':
-                    utils.np_array_to_png_file_converter(np.array(image_as_np_array), "test_hidden.png")
+                    # utils.np_array_to_png_file_converter(np.array(image_as_np_array), "test_hidden.png")
                     steg_decode.decode(image_as_np_array)
                     return r"C:\\BlaBla"
                 bit_to_hide = bits_to_hide[0]

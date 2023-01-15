@@ -6,7 +6,7 @@ import config
 import utils
 from config import SPACE, EMPTY, MAX_HIDE_CHANNELS, VALID_UPPERCASE_LETTERS, VALID_PUNCTUATIONS
 
-PATH = "hidden.png"
+PATH = "SW_hide.png"
 
 
 class Combination(object):
@@ -108,6 +108,24 @@ def add_punctuations_if_exists(combinations: [Combination],
     return combinations_with_punctuations
 
 
+def word_after_space_and_space_after_word(current_longest_strike: [Combination], value: str) -> bool:
+    if len(current_longest_strike) == 0:
+        if value == SPACE:
+            return False
+        else:
+            return True
+
+    previous_combination_value = current_longest_strike[-1].value
+
+    if previous_combination_value == SPACE and value == SPACE:
+        return False
+
+    if previous_combination_value != SPACE and value != SPACE:
+        return False
+
+    return True
+
+
 def longest_words_strike(all_combinations: [Combination]) -> str:
     current_strike_len = 0
     max_strike_len = 0
@@ -118,17 +136,25 @@ def longest_words_strike(all_combinations: [Combination]) -> str:
         if next_combination < len(all_combinations):
             next_combination_value = all_combinations[next_combination].value
             next_combination_start_index = all_combinations[next_combination].start_index
+            # Check that there are 2 words in a row,
+            # There are no 2 spaces in a row,
+            # There is a space after each word,
+            # And a word after each space.
             if (combination.start_index + len(combination.value) == next_combination_start_index) \
-                    and not (combination.value == next_combination_value == SPACE):
+                    and word_after_space_and_space_after_word(current_longest_strike, combination.value):
                 current_strike_len += 1
                 current_longest_strike.append(combination)
             else:
-                current_longest_strike.append(combination)
+                if combination.value != SPACE:
+                    current_longest_strike.append(combination)
                 if current_strike_len > max_strike_len:
                     max_strike_len = current_strike_len
                     longest_strike = copy.deepcopy(current_longest_strike)
-                    current_longest_strike = []
                 current_strike_len = 0
+                current_longest_strike.clear()
+        # In case there is only one word in the image
+        if len(longest_strike) == 0 and combination.value != SPACE:
+            longest_strike.append(combination)
     return ''.join([combination.value for combination in longest_strike])
 
 
@@ -151,7 +177,6 @@ def guess_hidden_text(symbols_of_channels: [[str]]) -> str:
     all_combinations.sort(key=lambda c: c.start_index)
 
     hidden_text = longest_words_strike(all_combinations)
-    print(hidden_text)
     return hidden_text
 
 
@@ -181,12 +206,15 @@ def get_hidden_ascii_symbols_of_channels_from_image_as_np_array(image_as_np_arra
 def decode(image_as_np_array: np.ndarray) -> str:
     symbols_of_channels = get_hidden_ascii_symbols_of_channels_from_image_as_np_array(image_as_np_array)
     best_guess = guess_hidden_text(symbols_of_channels)
+    print(best_guess)
     return best_guess
 
 
 def main() -> None:
     image_as_np_array = utils.png_file_to_rgb_np_array_converter(PATH)
-    print(decode(image_as_np_array))
+    hidden_text = decode(image_as_np_array)
+    print(hidden_text)
+    return
 
 
 if __name__ == '__main__':
