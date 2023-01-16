@@ -1,17 +1,18 @@
+import argparse
+
 import numpy as np
 
-import steg_decode
 import utils
 from config import NUM_OF_BITS_IN_ASCII_SYMBOL
 
-EXAMPLE_IMAGE = [[(27, 64, 164), (248, 244, 194), (174, 246, 250), (149, 95, 232)],
-                 [(188, 156, 169), (71, 167, 127), (132, 173, 97), (113, 69, 206)],
-                 [(255, 29, 213), (53, 153, 220), (246, 225, 229), (142, 82, 175)]]
 
-# EXAMPLE_TEXT = 'Hey! How are you? (I am fine, Thanks)'
-EXAMPLE_TEXT = "Imagine there is no heaven, It is easy if you try. No hell below us Above us, only sky."
+def new_path_name(image_path: str) -> str:
+    # Given image has png extension
+    if image_path[-4:] == '.png':
+        return rf"{image_path[0:-4]}_hidden.png"
 
-PATH = "test.png"
+    # Given image has no png extension
+    return rf"{image_path}_hidden.png"
 
 
 def hide(image_path: str, text_to_hide: str) -> str:
@@ -27,19 +28,25 @@ def hide(image_path: str, text_to_hide: str) -> str:
             rgb_value = image_as_np_array[line_num][column_num]
             for color_index, color_value in enumerate(rgb_value):
                 if bits_to_hide == '':
-                    # utils.np_array_to_png_file_converter(np.array(image_as_np_array), "test_hidden.png")
-                    steg_decode.decode(image_as_np_array)
-                    return r"C:\\BlaBla"
+                    new_name = new_path_name(image_path)
+                    utils.np_array_to_png_file_converter(np.array(image_as_np_array), new_name)
+                    return new_name
                 bit_to_hide = bits_to_hide[0]
                 bits_to_hide = bits_to_hide[1:]
                 image_as_np_array[line_num][column_num][color_index] = utils.set_bit(
                     image_as_np_array[line_num][column_num][color_index], int(bit_to_hide), 0)
-
-    return PATH
+    raise Exception("Unexpected error occurred.")
 
 
 def main() -> None:
-    hide(PATH, EXAMPLE_TEXT)
+    EXAMPLE_TEXT_PATH = r'Example\example_text.txt'
+    EXAMPLE_IMAGE_PATH = r'Example\cubes.png'
+
+    with open(EXAMPLE_TEXT_PATH, 'r') as file:
+        text = file.read().replace('\n', '')
+
+    new_path = hide(EXAMPLE_IMAGE_PATH, text)
+    print(f'The text was hidden successfully in the image, and saved in {new_path}')
 
 
 if __name__ == '__main__':
