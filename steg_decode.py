@@ -58,20 +58,23 @@ def remove_non_valid_one_letter_words(combinations: [Combination]) -> [Combinati
 def probably_english_word(combination: Combination) -> Combination or None:
     """
     This function is called when removing non-English words from the combinations.
+    Notice - our MOST_COMMON_ENGLISH_WORDS list is lowercase.
     :param combination: Combination with text which is not '' and not  ' '.
     :return: What is most likely to be the word in english of the given text, or None if nothing was found.
     """
     text = combination.text
+    text_lower = text.lower()
     start_index = combination.start_index
 
-    for word in config.MOST_COMMON_ENGLISH_WORDS:
-        if word.lower() == text.lower():
-            return combination
+    if text_lower in config.MOST_COMMON_ENGLISH_WORDS:
+        return combination
 
     for word in config.MOST_COMMON_ENGLISH_WORDS:
-        if word.lower() in text.lower():
-            if len(text) - len(word) <= 1:
-                if text[1:].lower() == word.lower():
+        if word == text_lower:
+            return combination
+        if word in text_lower:
+            if len(text_lower) - len(word) <= 1:
+                if text_lower[1:] == word:
                     return Combination(start_index + 1, text[1:])
                 return Combination(start_index, text[:-1])
     return None

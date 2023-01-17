@@ -13,7 +13,7 @@ LEFT_PUNCTUATIONS = '('
 RIGHT_PUNCTUATIONS = ')!?.,'
 
 MOST_COMMON_ENGLISH_WORDS = ["the", "of", "to", "and", "a", "in", "is", "it", "you", "that", "he", "was", "for", "on",
-                             "are", "with", "as", "I", "his", "they", "be", "at", "one", "have", "this", "from", "or",
+                             "are", "with", "as", "i", "his", "they", "be", "at", "one", "have", "this", "from", "or",
                              "had", "by", "not", "word", "but", "what", "some", "we", "can", "out", "other", "were",
                              "all", "there", "when", "up", "use", "your", "how", "said", "an", "each", "she", "which",
                              "do", "their", "time", "if", "will", "way", "about", "many", "then", "them", "write",
@@ -32,7 +32,7 @@ MOST_COMMON_ENGLISH_WORDS = ["the", "of", "to", "and", "a", "in", "is", "it", "y
                              "mother", "world", "near", "build", "self", "earth", "father", "head", "stand", "own",
                              "page", "should", "country", "found", "answer", "school", "grow", "study", "still",
                              "learn", "plant", "cover", "food", "sun", "four", "between", "state", "keep", "eye",
-                             "never", "last", "let", "easy", "thought", "city", "tree", "cross", "farm", "hard", "start",
+                             "never", "last", "let", "easy", "thought", "city", "tree", "cross", "farm", "hard",
                              "might", "story", "saw", "far", "sea", "draw", "left", "late", "run", "don't", "while",
                              "press", "close", "night", "real", "life", "few", "north", "open", "seem", "together",
                              "next", "white", "children", "begin", "got", "walk", "example", "ease", "paper", "group",
@@ -113,4 +113,4 @@ MOST_COMMON_ENGLISH_WORDS = ["the", "of", "to", "and", "a", "in", "is", "it", "y
                              "degree", "populate", "chick", "dear", "enemy", "reply", "drink", "occur", "support",
                              "speech", "nature", "range", "steam", "motion", "path", "liquid", "log", "meant",
                              "quotient", "teeth", "general", "market", "shell", "blood", "bread", "neck", "grass",
-                             "guess", "skin", "cow"]
+                             "guess", "skin", "start", "cow"]
