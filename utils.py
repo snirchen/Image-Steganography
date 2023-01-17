@@ -1,5 +1,5 @@
-from PIL import Image
 import numpy as np
+from PIL import Image
 
 
 def png_file_to_rgb_np_array_converter(png_file_path: str) -> np.ndarray:
@@ -63,10 +63,6 @@ def np_array_to_png_file_converter(np_array: np.ndarray, path_to_save_png_file: 
     :return: None
     """
     Image.fromarray(np_array, mode='RGB').save(path_to_save_png_file)
-
-
-def get_bit(value: int, bit_index: int) -> int:
-    return (value >> bit_index) & 1
 
 
 def set_bit(value: int, bit_to_set: int, bit_index: int) -> int:

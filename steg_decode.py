@@ -201,28 +201,25 @@ def guess_hidden_text(symbols_of_channels: [[str]]) -> str:
 
 
 def get_hidden_ascii_symbols_of_channels_from_image_as_np_array(image_as_np_array: np.ndarray, start_index) -> [[int]]:
-    hidden_ascii_symbols_of_channels = [[] for _ in range(MAX_HIDE_CHANNELS)]
-    current_ascii_values = [0 for _ in range(MAX_HIDE_CHANNELS)]
-    bits_counter = 0
-    for line_num, line in enumerate(image_as_np_array):
-        for column_num, column in enumerate(line):
-            # looping over all RGB values in image
-            rgb_value = image_as_np_array[line_num][column_num]
-            for color_value in rgb_value:
-                if start_index > 0:
-                    start_index -= 1
-                    continue
-                for channel_index in range(MAX_HIDE_CHANNELS):
-                    current_ascii_values[channel_index] = \
-                        utils.set_bit(current_ascii_values[channel_index],
-                                      utils.get_bit(color_value, channel_index),
-                                      (config.NUM_OF_BITS_IN_ASCII_SYMBOL - 1) - bits_counter)
-                bits_counter += 1
-                if bits_counter == config.NUM_OF_BITS_IN_ASCII_SYMBOL:
-                    bits_counter = 0
-                    for channel_index in range(MAX_HIDE_CHANNELS):
-                        hidden_ascii_symbols_of_channels[channel_index].append(chr(current_ascii_values[channel_index]))
-                        current_ascii_values[channel_index] = 0
+    image_as_np_array = image_as_np_array.flatten()
+    image_as_np_array = image_as_np_array[start_index:]
+
+    # To make the array divisible by NUM_OF_BITS_IN_ASCII_SYMBOL
+    num_of_colors_to_ignore_at_the_end = image_as_np_array.size % config.NUM_OF_BITS_IN_ASCII_SYMBOL
+    if num_of_colors_to_ignore_at_the_end:
+        image_as_np_array = image_as_np_array[:-num_of_colors_to_ignore_at_the_end]
+
+    hidden_ascii_symbols_of_channels = [copy.deepcopy(image_as_np_array) for _ in range(MAX_HIDE_CHANNELS)]
+
+    for i in range(MAX_HIDE_CHANNELS):
+        # Get the LSB-i of each color (byte) in the image
+        mask = utils.set_bit_1(0, i)
+        hidden_ascii_symbols_of_channels[i] = (hidden_ascii_symbols_of_channels[i] & mask)
+        # Combine each 8 bits to a uint-8
+        hidden_ascii_symbols_of_channels[i] = np.packbits(hidden_ascii_symbols_of_channels[i])
+        # Convert each uint-8 to its ascii representation
+        hidden_ascii_symbols_of_channels[i] = list(map(chr, hidden_ascii_symbols_of_channels[i]))
+
     return hidden_ascii_symbols_of_channels
 
 
