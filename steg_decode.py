@@ -66,10 +66,10 @@ def probably_english_word(combination: Combination) -> Combination or None:
     text_lower = text.lower()
     start_index = combination.start_index
 
-    if text_lower in config.MOST_COMMON_ENGLISH_WORDS:
+    if text_lower in config.MOST_COMMON_ENGLISH_WORDS_LOWERCASE:
         return combination
 
-    for word in config.MOST_COMMON_ENGLISH_WORDS:
+    for word in config.MOST_COMMON_ENGLISH_WORDS_LOWERCASE:
         if word == text_lower:
             return combination
         if word in text_lower:
