@@ -1,3 +1,4 @@
+import argparse
 import copy
 from datetime import datetime
 
@@ -239,13 +240,24 @@ def decode(image_as_np_array: np.ndarray) -> str:
 
 
 def main() -> None:
-    print(datetime.now())
-    PATH = r"hidden.png"
-    image_as_np_array = utils.png_file_to_rgb_np_array_converter(PATH)
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--image',
+                        type=str,
+                        help='Path of a PNG image with hidden text.',
+                        required=True)
+
+    args = parser.parse_args()
+    image_path = args.image
+
+    print(f'\nThe decoding process started. The time is: {datetime.now()}\n')
+    image_as_np_array = utils.png_file_to_rgb_np_array_converter(image_path)
     hidden_text = decode(image_as_np_array)
     with open(f'{config.ID}.txt', 'w') as f:
         f.write(hidden_text)
-    print(datetime.now())
+    print(f'The text was found successfully! The time is {datetime.now()}\n'
+          f'\nThe text is: {hidden_text}\n'
+          f'And it was saved in {config.ID}.txt')
 
 
 if __name__ == '__main__':

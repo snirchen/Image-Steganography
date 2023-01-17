@@ -1,4 +1,7 @@
+from datetime import datetime
+
 import numpy as np
+import argparse
 
 import utils
 from config import NUM_OF_BITS_IN_ASCII_SYMBOL
@@ -37,14 +40,29 @@ def hide(image_path: str, text_to_hide: str) -> str:
 
 
 def main() -> None:
-    EXAMPLE_TEXT_PATH = r'Example\example_text.txt'
-    EXAMPLE_IMAGE_PATH = r'Example\cubes.png'
+    parser = argparse.ArgumentParser()
 
-    with open(EXAMPLE_TEXT_PATH, 'r') as file:
+    parser.add_argument('--image',
+                        type=str,
+                        help='Path of a PNG image.',
+                        required=True)
+    parser.add_argument('--text',
+                        type=str,
+                        help='Path of a TXT file that contains the text you want to hide.',
+                        required=True)
+
+    args = parser.parse_args()
+    text_path = args.text
+    image_path = args.image
+
+    print(f"\nThe hiding process started. The time is: {datetime.now()}\n")
+    with open(text_path, 'r') as file:
         text = file.read().replace('\n', '')
 
-    new_path = hide(EXAMPLE_IMAGE_PATH, text)
-    print(f'The text was hidden successfully in the image, and saved in {new_path}')
+    new_path = hide(image_path, text)
+    print(f"The hiding process finished. The time is: {datetime.now()}\n")
+    print(f'The text was hidden successfully in the image!\n'
+          f'It was saved in {new_path}')
 
 
 if __name__ == '__main__':
