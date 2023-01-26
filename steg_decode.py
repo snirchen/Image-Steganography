@@ -10,16 +10,26 @@ from config import SPACE, EMPTY, MAX_HIDE_CHANNELS, VALID_UPPERCASE_LETTERS, LEF
 
 
 class Text(object):
-    def __init__(self, start_index: int, text: str):
+
+    def __init__(self, start_index: int, text: str) -> None:
+        """
+        This class represents a text (sequence of symbols) that appears in the decoded image.
+        :param start_index: The text start index of the ascii symbols that were hidden in LSB channel of the image.
+        :param text: Sequence of symbols
+        """
         self.start_index = start_index
         self.text = text
 
-    def clear(self):
+    def clear(self) -> None:
         self.start_index = -1
         self.text = EMPTY
 
 
 def get_valid_symbol_combinations_of_channel(channel: [str]) -> [[Text]]:
+    """
+    :param channel: List of ascii symbols that were hidden in LSB channel of the image.
+    :return: List of all the valid texts was found.
+    """
     possible_letter_combinations = []
     current_combination = Text(start_index=-1, text=EMPTY)
 
@@ -46,6 +56,11 @@ def get_valid_symbol_combinations_of_channel(channel: [str]) -> [[Text]]:
 
 
 def remove_non_valid_one_letter_words(words: [Text]) -> [Text]:
+    """
+    This function filter out all non-valid one-letter words from the given texts list.
+    In English, there are only 2 one-letter words: "I" and "a".
+    Each text that isn't one of those, or a space will be filtered out.
+    """
     filtered_words = []
     for word in words:
         if not len(word.text) == 1:
@@ -81,6 +96,10 @@ def probably_english_word(word: Text) -> Text or None:
 
 
 def remove_non_english_words(words: [Text]) -> [Text]:
+    """
+    This function filters out from the given list all the words that are not
+    common words in English according to the dictionary in the config.py file.
+    """
     filtered_words = []
 
     for word in words:
@@ -103,6 +122,13 @@ def remove_non_english_words(words: [Text]) -> [Text]:
 
 
 def add_punctuations_if_exists(words: [Text], symbols_of_channel: [str]) -> [Text]:
+    """
+    This function gets a list of all legal words in English that were hidden in an LSB channel.
+    It also gets the list of symbols were hidden in this LSB channel.
+
+    Based on these two, it adds to each word punctuations that were hidden in the channel,
+    punctuations that are placed just before or after the word.
+    """
     words_with_punctuations = []
     for word in words:
         previous_index = word.start_index - 1
@@ -134,7 +160,16 @@ def add_punctuations_if_exists(words: [Text], symbols_of_channel: [str]) -> [Tex
 
 
 # noinspection PyTypeChecker
-def longest_strike_from_word(i: int, all_words: [Text], should_be_space=False) -> [Text]:
+def longest_sentence_from_word(i: int, all_words: [Text], should_be_space=False) -> [Text]:
+    """
+    This recursive function, returns the longest strike of words and spaces starting from a specific word.
+
+    It looks at the start_index of the words, and based on the size of the word,
+    calculates the index where the next word should be.
+
+    Also, a check is made that after every English word there is a space,
+    and after every space there is an English word (so that we get a proper sentence)
+    """
     current_word = all_words[i]
 
     if all_words[i].text == SPACE and not should_be_space:
@@ -153,18 +188,22 @@ def longest_strike_from_word(i: int, all_words: [Text], should_be_space=False) -
             break
         possible_options_to_continue.append(j)
 
-    possible_strikes = [longest_strike_from_word(j, all_words, not should_be_space) for j in
+    possible_strikes = [longest_sentence_from_word(j, all_words, not should_be_space) for j in
                         possible_options_to_continue]
 
     return [current_word] if possible_strikes == [] else [current_word] + max(possible_strikes, key=len)
 
 
-def longest_words_strike(all_words: [Text]) -> str:
+def longest_sentence(all_words: [Text]) -> str:
+    """
+    This function calculate and returns the longest sentence in English that
+    was hidden in the image.
+    """
     max_strike_len = 0
     longest_strike = []
 
     for i in range(len(all_words)):
-        current_longest_strike = longest_strike_from_word(i, all_words)
+        current_longest_strike = longest_sentence_from_word(i, all_words)
         current_strike_len = len(current_longest_strike)
         if current_strike_len > max_strike_len:
             max_strike_len = current_strike_len
@@ -174,6 +213,9 @@ def longest_words_strike(all_words: [Text]) -> str:
 
 
 def guess_hidden_text(symbols_of_channels: [[str]]) -> str:
+    """
+    This function calculates and returns the longest sentence that was hidden in all relevant LSB channels.
+    """
     valid_text_channels = [[]] * len(symbols_of_channels)
 
     for i in range(len(valid_text_channels)):
@@ -185,11 +227,15 @@ def guess_hidden_text(symbols_of_channels: [[str]]) -> str:
     all_texts = [text for valid_text_channel in valid_text_channels for text in valid_text_channel]
     all_texts.sort(key=lambda t: t.start_index)
 
-    hidden_text = longest_words_strike(all_texts)
+    hidden_text = longest_sentence(all_texts)
     return hidden_text
 
 
-def get_hidden_ascii_symbols_of_channels_from_image_as_np_array(image_as_np_array: np.ndarray, start_index) -> [[int]]:
+def get_hidden_ascii_symbols_of_channels_from_image_as_np_array(image_as_np_array: np.ndarray, start_index) -> [[str]]:
+    """
+    This function creates and returns a list of all hidden ascii symbols were hidden in the image,
+    in all relevant LSB channels.
+    """
     image_as_np_array = image_as_np_array.flatten()
     image_as_np_array = image_as_np_array[start_index:]
 
@@ -206,13 +252,17 @@ def get_hidden_ascii_symbols_of_channels_from_image_as_np_array(image_as_np_arra
         hidden_ascii_symbols_of_channels[i] = (hidden_ascii_symbols_of_channels[i] & mask)
         # Combine each 8 bits to a uint-8
         hidden_ascii_symbols_of_channels[i] = np.packbits(hidden_ascii_symbols_of_channels[i])
-        # Convert each uint-8 to its ascii representation
+        # Convert each uint-8 to its ascii representation (string)
         hidden_ascii_symbols_of_channels[i] = list(map(chr, hidden_ascii_symbols_of_channels[i]))
 
     return hidden_ascii_symbols_of_channels
 
 
 def decode(image_as_np_array: np.ndarray) -> str:
+    """
+    This is the main logic function of decoding an image with hidden text in it.
+    It tries to find the best guess as if the text was hidden start from each byte in the image.
+    """
     max_words = 0
     best_guess = ''
     for i in range(8):
@@ -225,6 +275,10 @@ def decode(image_as_np_array: np.ndarray) -> str:
 
 
 def main() -> None:
+    """
+    The main function
+    It gets arguments from the user while running the program and call the main logic.
+    """
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--image',

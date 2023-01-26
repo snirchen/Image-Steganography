@@ -1,7 +1,7 @@
+import argparse
 from datetime import datetime
 
 import numpy as np
-import argparse
 
 import utils
 from config import NUM_OF_BITS_IN_ASCII_SYMBOL
@@ -17,6 +17,11 @@ def new_path_name(image_path: str) -> str:
 
 
 def hide(image_path: str, text_to_hide: str) -> str:
+    """
+    This is the main logic function of hiding text in LSB channel of an image.
+    It converts the text to a list of uint-8 ascii representation of each letter,
+    and then hides the text in the Least Significant Bits of the image and saves it.
+    """
     image_as_np_array = utils.png_file_to_rgb_np_array_converter(image_path)
     if image_as_np_array.size < len(text_to_hide) * 8:
         raise ValueError("The given text is too long for the given image.\n"
@@ -40,6 +45,10 @@ def hide(image_path: str, text_to_hide: str) -> str:
 
 
 def main() -> None:
+    """
+    The main function
+    It gets arguments from the user while running the program and call the main logic.
+    """
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--image',
