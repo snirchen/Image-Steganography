@@ -1,4 +1,2 @@
 <h1 align="center">Image Steganography</h1>
-
-This project presents a pixel art image editor developed in Python, offering a user-friendly interface and a variety of image editing tools. It's designed for artists, hobbyists, and anyone interested in pixel art creation.
-
+Background: Steganography is a method of hiding information within a file, message, image, or video. This work involves both hiding text inside an image and finding hidden text within an image.
