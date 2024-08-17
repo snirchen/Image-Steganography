@@ -39,7 +39,7 @@ py steg_decode.py --image <IMAGE_PATH>
 
 
 ## How it works | Hide Stage 👨‍💻
-
+test
 
 ## How it works | Decode Stage 🕵️‍♂️
-
+test
