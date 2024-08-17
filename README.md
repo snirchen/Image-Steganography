@@ -7,9 +7,8 @@ Steganography is a method of hiding information within a file, message, image, o
 
 - [Installation 💻](#installation-)
 - [Usage 🖱️](#usage-️)
-- [How it works | Hide Stage 👨‍💻](#how-️it-works-|-hide)
-- [How it works | Decode Stage 🕵️‍♂️](#how-️it-works-|-decode)
-- [Licence 📄](#license-)
+- [How it works | Hide Stage 👨‍💻](#how-it-works--hide-stage-)
+- [How it works | Decode Stage 🕵️‍♂️](#how-it-works--decode-stage-)
 
 ---
 
