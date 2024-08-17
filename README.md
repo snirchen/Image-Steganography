@@ -7,8 +7,8 @@ Steganography is a method of hiding information within a file, message, image, o
 
 - [Installation 💻](#installation-)
 - [Usage 🖱️](#usage-️)
-- [How it works | Hide Stage 👨‍💻](#hide-️)
-- [How it works | Decode Stage 🕵️‍♂️](#decode-️)
+- [How it works | Hide Stage 👨‍💻](#how-️it-works-|-hide)
+- [How it works | Decode Stage 🕵️‍♂️](#how-️it-works-|-decode)
 - [Licence 📄](#license-)
 
 ---
@@ -44,4 +44,3 @@ py steg_decode.py --image <IMAGE_PATH>
 
 ## How it works | Decode Stage 🕵️‍♂️
 
-## License 📄
