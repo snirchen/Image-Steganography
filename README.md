@@ -4,46 +4,38 @@
 Steganography is a method of hiding information within a file, message, image, or video. This project involves both hiding text inside an image and finding hidden text within an image. (Supported file type: PNG)
 
 ---
-
 - [Installation 💻](#installation-)
 - [Usage 🖱️](#usage-️)
 - [How it works | Hide Stage 👨‍💻](#how-it-works--hide-stage-)
 - [How it works | Decode Stage 🕵️‍♂️](#how-it-works--decode-stage-%EF%B8%8F%EF%B8%8F)
-
 ---
 
 ## Installation 💻
-
 1. Ensure Python 3.x is installed on your system.
 2. Clone the repository to your local machine.
 3. Install all required Python packages by running the following command in the terminal:
-
 ```bash
 pip install -r .\requirements.txt
 ```
 
-
 ## Usage 🖱️
-
 To hide text inside an image, run the following command in the terminal:
-
 ```bash
 py steg_hide.py --image <IMAGE_PATH> --text <TEXT_FILE_PATH>
 ```
 
-To find an hidden text inside an image, run the following command in the terminal:
-
+To find hidden text inside an image, run the following command in the terminal:
 ```bash
 py steg_decode.py --image <IMAGE_PATH>
 ```
-
 
 ## How it works | Hide Stage 👨‍💻
 In this stage, we hide text inside a PNG image.
 How is the text hidden? Before answering that, let's take a moment for a brief explanation:
 An image consists of many pixels. Each pixel is made up of three 8-bit bytes (values ranging from 0 to 255), called RGB (Red, Green, Blue). These three bytes represent the intensity of each color in a single pixel. Thus, the color of the pixel is a combination of red, green, and blue with varying intensities.
+
 <p align="center">
-  <img src="readme_images/rgb.png" width="300">
+  <img src="readme_images/rgb.png" width="400">
 </p>
 
 So where do we hide the text? As we mentioned, an image consists of pixels, and each pixel is composed of three colors. Each color is represented by a byte consisting of 8 bits. The intensity of each color is represented in binary. We hide the text in the least significant bits (LSB) of each byte.
@@ -80,23 +72,22 @@ def hide(image_path: str, text_to_hide: str) -> str:
                    image_as_np_array[line_num][column_num][color_index], int(bit_to_hide), 0)
    raise Exception("Unexpected error occurred.")
 ```
+
 Finally, after we have finished hiding all the bits, and the image now contains the hidden text, the image is saved in a path with the same name, but with the addition of "_hidden" and the PNG extension.
 
 To run the software, you will need to provide parameters for an image file and a text file:
 <p align="center">
-  <img src="readme_images/steg_hide_usage.png" width="300">
+  <img src="readme_images/steg_hide_usage.png" width="800">
 </p>
 
-Let’s provide it the example files:
-
+Let’s provide the example files:
 ```bash
 py .\steg_hide.py --image .\example_files\example_image.png --text .\example_files\example_text.txt
 ```
 
 The run was successful. Below are the two images, and the text file:
-
 <p align="center">
-  <img src="readme_images/steg_hide_running_example.png" width="300">
+  <img src="readme_images/steg_hide_running_example.png" width="800">
 </p>
 On the left is the original image, and on the right is the image with the hidden text: "Imagine there is no heaven! It is easy if you try. No hell below us. Above us, only sky (The Beatles)." As you can see, the change is not visible. Later, during the decode stage, we will find the hidden text by running steg_decode.py with the image on the right as a parameter.
 
