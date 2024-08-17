@@ -1,3 +1,5 @@
+from enum import Enum
+
 import numpy as np
 from PIL import Image
 
@@ -77,3 +79,18 @@ def set_bit_1(value: int, bit_index: int) -> int:
 
 def set_bit_0(value: int, bit_index: int) -> int:
     return value & ~(1 << bit_index)
+
+
+class Stage(Enum):
+    HIDE = 1
+    DECODE = 2
+
+
+def get_output_path(image_path: str, stage: Stage) -> str:
+    extension = {Stage.HIDE: "_hidden.png",
+                 Stage.DECODE: "_decoded.txt"}
+
+    if image_path[-4:] == '.png':
+        image_path = image_path[0:-4]
+
+    return f"{image_path}{extension[stage]}"

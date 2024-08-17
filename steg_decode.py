@@ -292,11 +292,13 @@ def main() -> None:
     print(f'\nThe decoding process started. The time is: {datetime.now()}\n')
     image_as_np_array = utils.png_file_to_rgb_np_array_converter(image_path)
     hidden_text = decode(image_as_np_array)
-    with open(f'{config.ID}.txt', 'w') as f:
+
+    decoded_image_path = utils.get_output_path(image_path, utils.Stage.DECODE)
+    with open(decoded_image_path, 'w') as f:
         f.write(hidden_text)
     print(f'The text was found successfully! The time is {datetime.now()}\n'
           f'\nThe text is: {hidden_text}\n'
-          f'And it was saved in {config.ID}.txt')
+          f'And it was saved in {decoded_image_path}')
 
 
 if __name__ == '__main__':

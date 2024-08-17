@@ -7,15 +7,6 @@ import utils
 from config import NUM_OF_BITS_IN_ASCII_SYMBOL
 
 
-def new_path_name(image_path: str) -> str:
-    # Given image has png extension
-    if image_path[-4:] == '.png':
-        return rf"{image_path[0:-4]}_hidden.png"
-
-    # Given image has no png extension
-    return rf"{image_path}_hidden.png"
-
-
 def hide(image_path: str, text_to_hide: str) -> str:
     """
     This is the main logic function of hiding text in LSB channel of an image.
@@ -34,7 +25,7 @@ def hide(image_path: str, text_to_hide: str) -> str:
             rgb_value = image_as_np_array[line_num][column_num]
             for color_index, color_value in enumerate(rgb_value):
                 if bits_to_hide == '':
-                    new_name = new_path_name(image_path)
+                    new_name = utils.get_output_path(image_path, utils.Stage.HIDE)
                     utils.np_array_to_png_file_converter(np.array(image_as_np_array), new_name)
                     return new_name
                 bit_to_hide = bits_to_hide[0]
