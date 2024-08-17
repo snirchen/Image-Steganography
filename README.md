@@ -77,7 +77,7 @@ Finally, after we have finished hiding all the bits, and the image now contains 
 
 To run the software, you will need to provide parameters for an image file and a text file:
 <p align="center">
-  <img src="readme_images/steg_hide_usage.png" width="800">
+  <img src="readme_images/steg_hide_usage.png" width="600">
 </p>
 
 Let’s provide the example files:
